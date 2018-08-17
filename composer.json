@@ -1,0 +1,40 @@
+{
+    "name": "apt/craft-google-location",
+    "description": "Select location in google map",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "craft google location"
+    ],
+    "support": {
+        "docs": "https://git1.apt.no/open/craft-google-location",
+        "issues": "https://git1.apt.no/open/craft-google-location/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Sømoen",
+            "homepage": "https://apt.no/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "apt\\craftgooglelocation\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Craft Google Location",
+        "handle": "craft-google-location",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://git1.apt.no/open/craft-google-location",
+        "class": "apt\\craftgooglelocation\\CraftGoogleLocation"
+    }
+}

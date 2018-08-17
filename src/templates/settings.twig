@@ -1,0 +1,25 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Google Location plugin for Craft CMS 3.x
+ *
+ * Craft Google Location Settings.twig
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   CraftGoogleLocation
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: 'Api key'|t('craft-google-location'),
+    id: 'apiKey',
+    name: 'apiKey',
+    value: settings['apiKey']})
+}}
+
+<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="nofollow noreferrer">{{ 'Get api key by following this documentation.'|t('craft-google-location') }}</a>

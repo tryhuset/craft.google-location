@@ -1,0 +1,24 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Google Location plugin for Craft CMS
+ *
+ * Location Field Settings
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   CraftGoogleLocation
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: 'Address field handler'|t('craft-google-location'),
+    instructions: 'Enter a field handler if you want to look up address when entering address.'|t('craft-google-location'),
+    id: 'address',
+    name: 'address',
+    value: field['address']})
+}}
