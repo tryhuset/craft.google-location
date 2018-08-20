@@ -16,8 +16,7 @@ use Craft;
 use craft\base\Model;
 
 const DEFAULT_COUNTRY = 'NO';
-const DEFAULT_LAT = 59.8939225;
-const DEFAULT_LNG = 10.7150775;
+const DEFAULT_ZOOM = 10;
 
 /**
  * @author    Thomas Sømoen
@@ -42,12 +41,17 @@ class Location extends Model
     /**
      * @var float
      */
-    public $lat = DEFAULT_LAT;
+    public $lat = null;
 
     /**
      * @var float
      */
-    public $lng = DEFAULT_LNG;
+    public $lng = null;
+
+    /**
+     * @var integer
+     */
+    public $zoom = DEFAULT_ZOOM;
 
     // Public Methods
     // =========================================================================
@@ -58,10 +62,13 @@ class Location extends Model
     public function rules()
     {
         return [
-            [['lat', 'lng'], 'number'],
+            [['lat', 'lng', 'zoom'], 'number'],
+            [['country', 'address'], 'string'],
             ['country', 'default', 'value' => DEFAULT_COUNTRY],
-            ['lat', 'default', 'value' => DEFAULT_LAT],
-            ['lng', 'default', 'value' => DEFAULT_LNG],
+            ['address', 'default', 'value' => ''],
+            ['lat', 'default', 'value' => null],
+            ['lng', 'default', 'value' => null],
+            ['zoom', 'default', 'value' => DEFAULT_ZOOM],
         ];
     }
 }

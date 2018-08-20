@@ -15,28 +15,57 @@
 
 {% import "_includes/forms" as forms %}
 
-{{ forms.selectField({
-    label: 'Country'|t('craft-google-location'),
-    id: name~'-country',
-    name: name~'[country]',
-    options: countries,
-    value: value.country
-})}}
+{% if showCountries|default(false) %}
+    {{ forms.selectField({
+        label: 'Country'|t('craft-google-location'),
+        id: name~'-country',
+        name: name~'[country]',
+        options: countries,
+        value: value.country
+    })}}
+{% else %}
+    {{ forms.hidden({
+        id: name~'-country',
+        name: name~'[country]',
+        value: value.country,
+    })}}
+{% endif %}
 
-{{ forms.textField({
-    label: 'Some Field',
-    instructions: 'Enter some text here.',
+{% if showAddress|default(false) %}
+    <div class="apt-google-location-address">
+        {{ forms.textareaField({
+            label: 'Address'|t('craft-google-location'),
+            id: name~'-address',
+            name: name~'[address]',
+            value: value.address,
+            rows: 5,
+        })}}
+        <div class="buttons">
+            <button class="btn btn-primary icon search" id="{{ name }}-lookup" type="button">{{ 'Lookup address'|t('craft-google-location') }}</button>
+        </div>
+    </div>
+{% else %}
+    {{ forms.hidden({
+        id: name~'-address',
+        name: name~'[address]',
+        value: value.address,
+    })}}
+{% endif %}
+
+{{ forms.hidden({
     id: name~'-lat',
     name: name~'[lat]',
-    value: value.lat
+    value: value.lat,
 })}}
-
-{{ forms.textField({
-    label: 'Some Field',
-    instructions: 'Enter some text here.',
+{{ forms.hidden({
     id: name~'-lng',
     name: name~'[lng]',
-    value: value.lng
+    value: value.lng,
+})}}
+{{ forms.hidden({
+    id: name~'-zoom',
+    name: name~'[zoom]',
+    value: value.zoom,
 })}}
 
 <div id="{{ name }}-map" class="apt-google-location-map"></div>

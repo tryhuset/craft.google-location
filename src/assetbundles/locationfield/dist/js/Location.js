@@ -24,9 +24,16 @@
 
         this._defaults = defaults;
         this._name = pluginName;
+        this._timeout = null;
 
+        this.init = this.init.bind(this);
+        this.initGoogleMap = this.initGoogleMap.bind(this);
+        this.showCountry = this.showCountry.bind(this);
+        this.showAddress = this.showAddress.bind(this);
+        this.updatePosition = this.updatePosition.bind(this);
+        this.onCountryChange = this.onCountryChange.bind(this);
+        this.onLookup = this.onLookup.bind(this);
         this.init();
-        this.createMap = this.createMap.bind(this);
     }
 
     Plugin.prototype = {
@@ -36,24 +43,135 @@
 
             $(function () {
               if (window.google) {
-                _this.createMap();
+                _this.initGoogleMap();
               } else {
-                $('body').on('apt-google-location-map-init', function() {
-                  _this.createMap();
+                $('body').one('apt-google-location-map-init', function() {
+                  _this.initGoogleMap();
                 });
               }
             });
         },
 
-        createMap: function() {
-          console.log(this.options);
-          console.log(this.options.namespace+'-map');
+        initGoogleMap: function() {
+          var _this = this;
           var mapContainer = document.getElementById(this.options.namespace+'-map');
-          this.map = map = new google.maps.Map(mapContainer, {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
+
+          this.country = document.getElementById(this.options.namespace+'-country');
+          this.address = document.getElementById(this.options.namespace+'-address');
+          this.lat = document.getElementById(this.options.namespace+'-lat');
+          this.lng = document.getElementById(this.options.namespace+'-lng');
+          this.zoom = document.getElementById(this.options.namespace+'-zoom');
+          this.lookup = document.getElementById(this.options.namespace+'-lookup');
+          this.geocoder = new google.maps.Geocoder();
+
+          var location = {
+            lat: parseFloat(this.lat.value),
+            lng: parseFloat(this.lng.value),
+          };
+
+          var zoom = parseInt(this.zoom.value);
+
+          if (this.country) {
+            this.country.addEventListener('change', this.onCountryChange);
+          }
+          if (this.lookup) {
+            this.lookup.addEventListener('click', this.onLookup);
+          }
+
+          this.map = new google.maps.Map(mapContainer, {
+            zoom: 4,
+            mapTypeControlOptions: {
+              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            fullscreenControl: false,
+            streetViewControl: false,
+            gestureHandling: 'cooperative',
           });
-        }
+
+          this.map.addListener('zoom_changed', function() {
+
+            if (_this.map.getZoom() !== _this.zoom.value) {
+              _this.zoom.value = _this.map.getZoom();
+            }
+          });
+
+          this.marker = new google.maps.Marker({
+            map: this.map,
+            draggable: true,
+          });
+
+          this.marker.addListener('dragend', function() {
+            _this.updatePosition(_this.marker.getPosition());
+          });
+
+          if (location.lat && location.lng) {
+            this.map.setCenter(location);
+            if (zoom) {
+              this.map.setZoom(zoom);
+            }
+            this.marker.setPosition(location);
+            this.marker.setTitle(this.address.value);
+          } else {
+            this.showCountry(this.country.value);
+          }
+        },
+
+        updatePosition: function(position) {
+          this.lat.value = position.lat();
+          this.lng.value = position.lng();
+        },
+
+        onCountryChange: function(e) {
+          this.showCountry(e.target.value);
+        },
+
+        onLookup: function() {
+          this.showAddress(this.address.value);
+        },
+
+        showCountry: function(countryCode) {
+          var _this = this;
+
+          this.geocoder.geocode({
+            componentRestrictions: {
+              country: countryCode,
+            }
+          }, function(results) {
+            if (results.length > 0) {
+              if (results[0].geometry) {
+                _this.map.setCenter(results[0].geometry.location);
+                if (results[0].geometry.bounds) {
+                  _this.map.fitBounds(results[0].geometry.bounds);
+                }
+                _this.marker.setPosition(results[0].geometry.location);
+                _this.marker.setTitle(results[0].formatted_address);
+                _this.updatePosition(results[0].geometry.location);
+              }
+            }
+          });
+        },
+
+        showAddress: function(address) {
+          var _this = this;
+          if (address.length > 0) {
+            this.geocoder.geocode({
+              address: address,
+              componentRestrictions: {
+                country: this.country.value,
+              }
+            }, function(results) {
+              if (results.length > 0) {
+                if (results[0].geometry) {
+                  _this.map.setCenter(results[0].geometry.location);
+                  _this.map.setZoom(12);
+                  _this.marker.setPosition(results[0].geometry.location);
+                  _this.marker.setTitle(address);
+                  _this.updatePosition(results[0].geometry.location);
+                }
+              }
+            });
+          }
+        },
     };
 
     // A really lightweight plugin wrapper around the constructor,

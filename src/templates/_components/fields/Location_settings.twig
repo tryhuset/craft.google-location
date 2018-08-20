@@ -15,10 +15,19 @@
 
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
-    label: 'Address field handler'|t('craft-google-location'),
-    instructions: 'Enter a field handler if you want to look up address when entering address.'|t('craft-google-location'),
+{{ forms.selectField({
+    label: 'Country'|t('craft-google-location'),
+    instructions: 'Select a country if you want to limit the map to a country. If not, leave it as it is.'|t('craft-google-location'),
+    id: 'country',
+    name: 'country',
+    options: countries,
+    value: field['country']
+})}}
+
+{{ forms.lightswitchField({
+    label: 'Address search'|t('craft-google-location'),
+    instructions: 'Turn on if you want an address field with search option.'|t('craft-google-location'),
     id: 'address',
     name: 'address',
-    value: field['address']})
-}}
+    on: field['address'],
+})}}

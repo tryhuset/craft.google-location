@@ -16,3 +16,31 @@
   height: 0;
   padding-top: 56.25%;
 }
+
+.apt-google-location-address {
+  padding-bottom: 1px;
+  margin-bottom: 24px;
+}
+
+.apt-google-location-address:last-child {
+  margin-bottom: 0;
+}
+
+.apt-google-location-address .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+}
+
+.apt-google-location-address button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}

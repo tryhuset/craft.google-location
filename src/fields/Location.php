@@ -35,7 +35,12 @@ class Location extends Field
     /**
      * @var string
      */
-    public $address = null;
+    public $country = null;
+
+    /**
+     * @var boolean
+     */
+    public $address = false;
 
     // Static Methods
     // =========================================================================
@@ -45,11 +50,20 @@ class Location extends Field
      */
     public static function displayName(): string
     {
-        return Craft::t('craft-google-location', 'Google map location');
+        return Craft::t('craft-google-location', 'Google map address location');
     }
 
     // Public Methods
     // =========================================================================
+
+    public function __construct($config = [])
+    {
+        /* transform old address value to new */
+        if (array_key_exists('address', $config)) {
+            $config['address'] = (bool)$config['address'];
+        }
+        parent::__construct($config);
+    }
 
     /**
      * @inheritdoc
@@ -58,8 +72,10 @@ class Location extends Field
     {
         $rules = parent::rules();
         $rules = array_merge($rules, [
-            ['address', 'string'],
-            ['address', 'default', 'value' => null],
+            ['country', 'string'],
+            ['address', 'boolean'],
+            ['country', 'default', 'value' => null],
+            ['address', 'default', 'value' => false],
         ]);
         return $rules;
     }
@@ -82,7 +98,7 @@ class Location extends Field
         }
 
         if (is_array($value)) {
-            return new Model();
+            return new Model($value);
         }
 
         if (is_string($value)) {
@@ -91,8 +107,6 @@ class Location extends Field
                 return new Model($json);
             }
         }
-
-
 
         return new Model();
     }
@@ -110,11 +124,17 @@ class Location extends Field
      */
     public function getSettingsHtml()
     {
+        $countries = CraftGoogleLocation::getInstance()->service->getCountries();
+        array_unshift($countries, [
+            'value' => null,
+            'label' => Craft::t('craft-google-location', 'All countries'),
+        ]);
         // Render the settings template
         return Craft::$app->getView()->renderTemplate(
             'craft-google-location/_components/fields/Location_settings',
             [
                 'field' => $this,
+                'countries' => $countries,
             ]
         );
     }
@@ -133,12 +153,17 @@ class Location extends Field
         $id = Craft::$app->getView()->formatInputId($this->handle);
         $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
+        if ($this->country) {
+            $value['country'] = $this->country;
+        }
+
         // Variables to pass down to our field JavaScript to let it namespace properly
         $jsonVars = [
             'id' => $id,
             'name' => $this->handle,
             'namespace' => $namespacedId,
             'prefix' => Craft::$app->getView()->namespaceInputId(''),
+            'country' => $this->country,
             'address' => $this->address,
         ];
         $jsonVars = Json::encode($jsonVars);
@@ -154,6 +179,8 @@ class Location extends Field
                 'id' => $id,
                 'namespacedId' => $namespacedId,
                 'countries' => $countries,
+                'showCountries' => (!$this->country),
+                'showAddress' => $this->address,
             ]
         );
     }
