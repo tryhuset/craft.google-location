@@ -46,13 +46,13 @@
         },
 
         createMap: function() {
-          console.log(this.options.prefix+'map');
-          var mapContainer = document.getElementById(this.options.prefix+'map');
-          console.log(mapContainer);
-          // this.map = map = new google.maps.Map(document.getElementById('map'), {
-          //   center: {lat: -34.397, lng: 150.644},
-          //   zoom: 8
-          // });
+          console.log(this.options);
+          console.log(this.options.namespace+'-map');
+          var mapContainer = document.getElementById(this.options.namespace+'-map');
+          this.map = map = new google.maps.Map(mapContainer, {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+          });
         }
     };
 

@@ -124,6 +124,8 @@ class Location extends Field
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+        $countries = CraftGoogleLocation::getInstance()->service->getCountries();
+
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(LocationFieldAsset::class);
 
@@ -151,6 +153,7 @@ class Location extends Field
                 'field' => $this,
                 'id' => $id,
                 'namespacedId' => $namespacedId,
+                'countries' => $countries,
             ]
         );
     }

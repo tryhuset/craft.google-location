@@ -15,23 +15,31 @@
 
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
-        label: 'Some Field',
-        instructions: 'Enter some text here.',
-        id: name~'_lat',
-        name: name~'[lat]',
-        value: value.lat
+{{ forms.selectField({
+    label: 'Country'|t('craft-google-location'),
+    id: name~'-country',
+    name: name~'[country]',
+    options: countries,
+    value: value.country
 })}}
 
 {{ forms.textField({
-        label: 'Some Field',
-        instructions: 'Enter some text here.',
-        id: name~'_lng',
-        name: name~'[lng]',
-        value: value.lng
+    label: 'Some Field',
+    instructions: 'Enter some text here.',
+    id: name~'-lat',
+    name: name~'[lat]',
+    value: value.lat
 })}}
 
-<div id="{{ name }}-map"></div>
+{{ forms.textField({
+    label: 'Some Field',
+    instructions: 'Enter some text here.',
+    id: name~'-lng',
+    name: name~'[lng]',
+    value: value.lng
+})}}
+
+<div id="{{ name }}-map" class="apt-google-location-map"></div>
 
 <script>
     function AptCraftGoogleLocationInitMap() {

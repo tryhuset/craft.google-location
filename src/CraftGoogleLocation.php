@@ -10,6 +10,7 @@
 
 namespace apt\craftgooglelocation;
 
+use apt\craftgooglelocation\services\Service as ServiceService;
 use apt\craftgooglelocation\models\Settings;
 use apt\craftgooglelocation\fields\Location as LocationField;
 
@@ -29,6 +30,7 @@ use yii\base\Event;
  * @package   CraftGoogleLocation
  * @since     1.0.0
  *
+ * @property  ServiceService $service
  */
 class CraftGoogleLocation extends Plugin
 {

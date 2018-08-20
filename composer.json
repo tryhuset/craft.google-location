@@ -35,6 +35,9 @@
         "hasCpSettings": true,
         "hasCpSection": false,
         "changelogUrl": "https://git1.apt.no/open/craft-google-location",
+        "components": {
+            "service": "apt\\craftgooglelocation\\services\\Service"
+        },
         "class": "apt\\craftgooglelocation\\CraftGoogleLocation"
     }
 }

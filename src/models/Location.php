@@ -15,6 +15,7 @@ use apt\craftgooglelocation\CraftGoogleLocation;
 use Craft;
 use craft\base\Model;
 
+const DEFAULT_COUNTRY = 'NO';
 const DEFAULT_LAT = 59.8939225;
 const DEFAULT_LNG = 10.7150775;
 
@@ -31,8 +32,21 @@ class Location extends Model
     /**
      * @var string
      */
+    public $country = DEFAULT_COUNTRY;
+
+    /**
+     * @var string
+     */
+    public $address = '';
+
+    /**
+     * @var float
+     */
     public $lat = DEFAULT_LAT;
 
+    /**
+     * @var float
+     */
     public $lng = DEFAULT_LNG;
 
     // Public Methods
@@ -45,6 +59,7 @@ class Location extends Model
     {
         return [
             [['lat', 'lng'], 'number'],
+            ['country', 'default', 'value' => DEFAULT_COUNTRY],
             ['lat', 'default', 'value' => DEFAULT_LAT],
             ['lng', 'default', 'value' => DEFAULT_LNG],
         ];
