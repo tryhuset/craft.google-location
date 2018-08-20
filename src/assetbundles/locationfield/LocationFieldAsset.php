@@ -38,8 +38,8 @@ class LocationFieldAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/Location.js',
             "https://maps.googleapis.com/maps/api/js?key={$apiKey}&callback=AptCraftGoogleLocationInitMap",
+            'js/Location.js',
         ];
 
         $this->css = [

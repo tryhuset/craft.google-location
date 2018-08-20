@@ -15,8 +15,6 @@
 
 {% import "_includes/forms" as forms %}
 
-{#% do view.registerAssetBundle("apt\\craftgooglelocation\\assetbundles\\locationfield\\LocationFieldAsset") %#}
-
 {{ forms.textField({
         label: 'Some Field',
         instructions: 'Enter some text here.',
@@ -33,12 +31,10 @@
         value: value.lng
 })}}
 
-<div id="apt-google-location-map"></div>
+<div id="{{ name }}-map"></div>
 
 <script>
     function AptCraftGoogleLocationInitMap() {
-        console.log('HEPP2');
         $('body').trigger('apt-google-location-map-init');
-        // $('#apt-google-location-map').craftGoogleLocationMap();
     }
 </script>

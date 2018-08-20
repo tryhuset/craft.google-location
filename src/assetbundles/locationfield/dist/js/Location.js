@@ -26,6 +26,7 @@
         this._name = pluginName;
 
         this.init();
+        this.createMap = this.createMap.bind(this);
     }
 
     Plugin.prototype = {
@@ -34,14 +35,24 @@
             var _this = this;
 
             $(function () {
-              console.log( _this.options);
-/* -- _this.options gives us access to the $jsonVars that our FieldType passed down to us */
+              if (window.google) {
+                _this.createMap();
+              } else {
+                $('body').on('apt-google-location-map-init', function() {
+                  _this.createMap();
+                });
+              }
+            });
+        },
 
-            });
-            console.log('HEPP1');
-            $('body').on('apt-google-location-map-init', function() {
-              console.log('INIT MAP');
-            });
+        createMap: function() {
+          console.log(this.options.prefix+'map');
+          var mapContainer = document.getElementById(this.options.prefix+'map');
+          console.log(mapContainer);
+          // this.map = map = new google.maps.Map(document.getElementById('map'), {
+          //   center: {lat: -34.397, lng: 150.644},
+          //   zoom: 8
+          // });
         }
     };
 
