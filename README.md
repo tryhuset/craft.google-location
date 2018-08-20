@@ -16,19 +16,29 @@ To install the plugin, follow these instructions.
 
         cd /path/to/project
 
-2. Then tell Composer to load the plugin:
+2. add this to composer
 
-        composer require https://git1.apt.no/open/craft-google-location/craft-google-location
+        "repositories": [
+          ...,
+          {
+            "type": "vcs",
+            "url": "https://git1.apt.no/open/craft-google-location.git"
+          }
+        ],
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Craft Google Location.
+3. Then tell Composer to load the plugin:
+
+        composer require apt/craft-google-location
+
+4. In the Control Panel, go to Settings → Plugins and click the “Install” button for Craft Google Location.
 
 ## Craft Google Location Overview
 
--Insert text here-
+Adds google maps fields to admin
 
 ## Configuring Craft Google Location
 
--Insert text here-
+create google api key and enable google maps api and google geocode api.
 
 ## Using Craft Google Location
 
