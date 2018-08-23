@@ -71,4 +71,9 @@ class Location extends Model
             ['zoom', 'default', 'value' => DEFAULT_ZOOM],
         ];
     }
+
+    public function getCountryName()
+    {
+        return CraftGoogleLocation::getInstance()->service->getCountryName($this->country);
+    }
 }

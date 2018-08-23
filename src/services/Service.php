@@ -22,15 +22,11 @@ use craft\base\Component;
  */
 class Service extends Component
 {
-    // Public Methods
-    // =========================================================================
+    private $countries = [];
 
-    /*
-     * @return mixed
-     */
-    public function getCountries()
+    public function __construct($config = [])
     {
-        $countries = [
+        $this->countries = [
             ['value' => 'AD', 'label' => Craft::t('craft-google-location', 'Andorra')],
             ['value' => 'AE', 'label' => Craft::t('craft-google-location', 'United Arab Emirates')],
             ['value' => 'AF', 'label' => Craft::t('craft-google-location', 'Afghanistan')],
@@ -281,6 +277,32 @@ class Service extends Component
             ['value' => 'ZM', 'label' => Craft::t('craft-google-location', 'Zambia')],
             ['value' => 'ZW', 'label' => Craft::t('craft-google-location', 'Zimbabwe')],
         ];
+        parent::__construct($config);
+    }
+
+
+    // Public Methods
+    // =========================================================================
+
+    public function getCountryName($code)
+    {
+        $name = null;
+        foreach ($this->countries as $country) {
+            if ($country['value'] === $code) {
+                $name = $country['label'];
+                break;
+            }
+        }
+
+        return $name;
+    }
+
+    /*
+     * @return mixed
+     */
+    public function getCountries()
+    {
+        $countries = $this->countries;
 
         usort($countries, function($a, $b) {
             return strcasecmp($a['label'], $b['label']);
