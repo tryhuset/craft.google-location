@@ -13,6 +13,7 @@ namespace apt\craftgooglelocation;
 use apt\craftgooglelocation\services\Service as ServiceService;
 use apt\craftgooglelocation\models\Settings;
 use apt\craftgooglelocation\fields\Location as LocationField;
+use apt\craftgooglelocation\fields\Area as AreaField;
 
 use Craft;
 use craft\base\Plugin;
@@ -48,7 +49,7 @@ class CraftGoogleLocation extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.1';
+    public $schemaVersion = '1.0.2';
 
     // Public Methods
     // =========================================================================
@@ -66,6 +67,7 @@ class CraftGoogleLocation extends Plugin
             Fields::EVENT_REGISTER_FIELD_TYPES,
             function (RegisterComponentTypesEvent $event) {
                 $event->types[] = LocationField::class;
+                $event->types[] = AreaField::class;
             }
         );
 

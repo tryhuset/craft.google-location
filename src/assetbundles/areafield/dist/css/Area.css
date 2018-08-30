@@ -1,0 +1,28 @@
+/**
+ * Craft Google Location plugin for Craft CMS
+ *
+ * Location Field CSS
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   CraftGoogleLocation
+ * @since     1.0.0
+ */
+
+.apt-google-area-map {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 56.25%;
+}
+
+.apt-google-area-controls {
+  display: none;
+  margin: 10px;
+  padding: 5px;
+}
+
+.apt-google-area-map .apt-google-area-controls {
+  display: block;
+}

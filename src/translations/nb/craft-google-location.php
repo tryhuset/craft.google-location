@@ -21,6 +21,7 @@ return [
     'Country' => 'Land',
     'Address' => 'Adresse',
     'Lookup address' => 'Slå opp adressen',
+    'Search places' => 'Søk på steder',
 
     'Norway' => 'Norge',
     'United Arab Emirates' => 'De forente arabiske emirater ',

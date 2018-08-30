@@ -1,0 +1,31 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Google Location plugin for Craft CMS 3.x
+ *
+ * Location Field Input
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   CraftGoogleLocation
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.hidden({
+    id: name,
+    name: name,
+    value: value|json_encode,
+})}}
+
+<input id="{{ name }}-search" class="apt-google-area-controls controls" type="text" placeholder="{{ 'Search places'|t('craft-google-location') }}">
+<div id="{{ name }}-map" class="apt-google-area-map"></div>
+
+<script>
+    function AptCraftGoogleLocationInitMap() {
+        $('body').trigger('apt-google-area-map-init');
+    }
+</script>
