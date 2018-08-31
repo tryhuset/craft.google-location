@@ -10,7 +10,8 @@
 
 namespace apt\craftgooglelocation;
 
-use apt\craftgooglelocation\services\Service as ServiceService;
+use apt\craftgooglelocation\services\Country as CountryService;
+use apt\craftgooglelocation\services\Content as ContentService;
 use apt\craftgooglelocation\models\Settings;
 use apt\craftgooglelocation\fields\Location as LocationField;
 use apt\craftgooglelocation\fields\Area as AreaField;
@@ -31,7 +32,8 @@ use yii\base\Event;
  * @package   CraftGoogleLocation
  * @since     1.0.0
  *
- * @property  ServiceService $service
+ * @property  CountryService $country
+ * @property  ContentService $content
  */
 class CraftGoogleLocation extends Plugin
 {

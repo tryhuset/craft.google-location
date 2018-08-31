@@ -55,7 +55,6 @@
           this.input = document.getElementById(this.options.namespace);
           this.search = document.getElementById(this.options.namespace+'-search');
           this.searchBox = new google.maps.places.SearchBox(this.search);
-          this.geocoder = new google.maps.Geocoder();
           this.map = new google.maps.Map(mapContainer, {
             center: {lat: 59.0538388, lng: 10.0289138},
             zoom: 8,
@@ -109,7 +108,7 @@
         },
 
         fitToBounds: function() {
-          const bounds = new google.maps.LatLngBounds();
+          var bounds = new google.maps.LatLngBounds();
           if (this.shapes.length) {
             this.shapes.forEach(function(shape) {
               shape.getPath().getArray().forEach(function(path) {
@@ -157,9 +156,9 @@
 
         createShapes: function(shapes = []) {
           var _this = this;
-          return shapes.map((paths, i) => {
+          return shapes.map(function(paths, i) {
             var shape = new google.maps.Polygon({ paths });
-            shape = this.createShape(shape, i);
+            shape = _this.createShape(shape, i);
             shape.setMap(_this.map);
             return shape;
           });
@@ -174,9 +173,9 @@
           shape.setDraggable(true);
           shape.setOptions({ zIndex: ((index + 1) * 10) });
 
-          const onEdit = () => {
+          var onEdit = function() {
             if (!dragging) {
-              this.triggerSelectionChange();
+              _this.updateInput();
             }
           };
 
@@ -184,25 +183,25 @@
           google.maps.event.addListener(path, 'remove_at', onEdit);
           google.maps.event.addListener(path, 'set_at', onEdit);
 
-          google.maps.event.addListener(shape, 'rightclick', () => {
+          google.maps.event.addListener(shape, 'rightclick', function() {
             _this.destroyShape(shape);
             _this.removeShape(shape, true);
           });
 
-          google.maps.event.addListener(shape, 'dragstart', () => {
+          google.maps.event.addListener(shape, 'dragstart', function() {
             dragging = true;
           });
 
-          google.maps.event.addListener(shape, 'dragend', () => {
+          google.maps.event.addListener(shape, 'dragend', function() {
             dragging = false;
-            this.triggerSelectionChange();
+            _this.updateInput();
           });
 
           return shape;
         },
 
         destroyShape: function(shape) {
-          const path = shape.getPath();
+          var path = shape.getPath();
           google.maps.event.clearListeners(shape, 'rightclick');
           google.maps.event.clearListeners(path, 'insert_at');
           google.maps.event.clearListeners(path, 'remove_at');
@@ -210,28 +209,26 @@
           shape.setMap(null);
         },
 
-        addShape: function(shape, trigger = false) {
+        addShape: function(shape, update = false) {
           this.shapes.push(shape);
-          if (trigger) {
-            this.triggerSelectionChange();
+          if (update) {
+            this.updateInput();
           }
         },
 
-        removeShape: function(shape, trigger = false) {
+        removeShape: function(shape, update = false) {
           this.destroyShape(shape);
 
           this.shapes = this.shapes.filter(function(s) {
             return s !== shape;
           });
 
-          if (trigger) {
-            this.triggerSelectionChange();
+          if (update) {
+            this.updateInput();
           }
         },
 
-        triggerSelectionChange: function() {
-          console.log(this.shapes);
-
+        updateInput: function() {
           var transformed = this.shapes.map(function(shape) {
             return shape.getPath().getArray().map(function(path) {
               return {

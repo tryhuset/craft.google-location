@@ -124,7 +124,8 @@ class Location extends Field
      */
     public function getSettingsHtml()
     {
-        $countries = CraftGoogleLocation::getInstance()->service->getCountries();
+        dd(CraftGoogleLocation::getInstance());
+        $countries = CraftGoogleLocation::getInstance()->country->getCountries();
         array_unshift($countries, [
             'value' => null,
             'label' => Craft::t('craft-google-location', 'All countries'),
@@ -144,7 +145,8 @@ class Location extends Field
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $countries = CraftGoogleLocation::getInstance()->service->getCountries();
+        // $countries = CraftGoogleLocation::getInstance()->country->getCountries();
+        dd(CraftGoogleLocation::getInstance());
 
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(LocationFieldAsset::class);

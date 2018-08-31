@@ -74,6 +74,6 @@ class Location extends Model
 
     public function getCountryName()
     {
-        return CraftGoogleLocation::getInstance()->service->getCountryName($this->country);
+        return CraftGoogleLocation::getInstance()->country->getCountryName($this->country);
     }
 }

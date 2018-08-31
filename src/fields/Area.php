@@ -120,6 +120,8 @@ class Area extends Field
     public function getSettingsHtml()
     {
         Craft::$app->getView()->registerAssetBundle(AreaSettingsAsset::class);
+        $locationFields = CraftGoogleLocation::getInstance()->content->getLocationsFields();
+        d($locationFields);
         $sections = [[
             'value' => '',
             'label' => Craft::t('craft-google-location', 'Select section'),
@@ -127,59 +129,6 @@ class Area extends Field
         $jssections = [];
         $types = [];
         $fields = [];
-
-        $sectionObjects = Craft::$app->sections->getAllSections();
-        foreach ($sectionObjects as $section) {
-            $sections[] = [
-                'value' => $section->handle,
-                'label' => $section->name,
-            ];
-            $jssections[$section->handle] = [
-                'label' => Craft::t('craft-google-location', 'Select entry type'),
-                'types' => [],
-            ];
-            if ($section->handle === $this->section) {
-                $types[] = [
-                    'label' => Craft::t('craft-google-location', 'Select entry type'),
-                    'value' => '',
-                ];
-            }
-
-            $entryTypes = $section->getEntryTypes();
-            foreach ($entryTypes as $entryType) {
-                $jssections[$section->handle]['types'][$entryType->handle] = [
-                    'label' => Craft::t('craft-google-location', $entryType->name),
-                    'fields' => [[
-                        'handle' => '',
-                        'label' => Craft::t('craft-google-location', 'Select field'),
-                    ]],
-                ];
-                if ($section->handle === $this->section && $entryType->handle === $this->type) {
-                    $types[] = [
-                        'label' => Craft::t('craft-google-location', $entryType->name),
-                        'value' => $entryType->handle,
-                    ];
-                    $fields[] = [
-                        'label' => Craft::t('craft-google-location', 'Select field'),
-                        'value' => '',
-                    ];
-                }
-                $fieldsObjects = $entryType->getFieldLayout()->getFields();
-
-                foreach ($fieldsObjects as $field) {
-                    $jssections[$section->handle]['types'][$entryType->handle]['fields'][] = [
-                        'handle' => $field->handle,
-                        'label' => Craft::t('craft-google-location', $field->name),
-                    ];
-                    if ($section->handle === $this->section && $entryType->handle === $this->type) {
-                        $fields[] = [
-                            'label' => Craft::t('craft-google-location', $field->name),
-                            'value' => $field->handle,
-                        ];
-                    }
-                }
-            }
-        }
 
         $prefix = Craft::$app->getView()->namespaceInputId('');
         $jsonVars = [

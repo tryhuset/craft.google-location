@@ -23,6 +23,13 @@
 
 <input id="{{ name }}-search" class="apt-google-area-controls controls" type="text" placeholder="{{ 'Search places'|t('craft-google-location') }}">
 <div id="{{ name }}-map" class="apt-google-area-map"></div>
+<div class="apt-google-area-instructions">
+    <ul>
+        <li>{{ 'Click on the {icon} icon to draw a new area.'|t('craft-google-location', { icon: '<span class="craft-google-location-icon craft-google-location-polygon"><img src="https://maps.gstatic.com/mapfiles/drawing.png"></span>' })|raw }}</li>
+        <li>{{ 'Click on the {icon} icon to move or shange area.'|t('craft-google-location', { icon: '<span class="craft-google-location-icon craft-google-location-move"><img src="https://maps.gstatic.com/mapfiles/drawing.png"></span>'})|raw }}</li>
+        <li>{{ 'Right click on the area to remove it.'|t('craft-google-location') }}</li>
+    </ul>
+</div>
 
 <script>
     function AptCraftGoogleLocationInitMap() {

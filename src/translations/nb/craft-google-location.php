@@ -22,6 +22,9 @@ return [
     'Address' => 'Adresse',
     'Lookup address' => 'Slå opp adressen',
     'Search places' => 'Søk på steder',
+    'Click on the {icon} icon to draw a new area.' => 'Klikk på {icon} ikonet for å markere ett nytt område.',
+    'Click on the {icon} icon to move or shange area.' => 'Klipp på {icon} ikonet for å flytte på, eller endre formen på området.',
+    'Right click on the area to remove it.' => 'Høyreklikk på området for å fjerne det.',
 
     'Norway' => 'Norge',
     'United Arab Emirates' => 'De forente arabiske emirater ',
