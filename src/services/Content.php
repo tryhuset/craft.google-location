@@ -15,7 +15,10 @@ use apt\craftgooglelocation\CraftGoogleLocation;
 use Craft;
 use craft\base\Component;
 use craft\fields\Matrix;
+use craft\elements\Entry;
+use craft\elements\db\MatrixBlockQuery;
 use apt\craftgooglelocation\fields\Location;
+use apt\craftgooglelocation\models\Location as LocationModel;
 
 /**
  * @author    Thomas Sømoen
@@ -56,13 +59,13 @@ class Content extends Component
                 $assoc[$field->handle] = [
                     'type' => 'location',
                     'handle' => $field->handle,
-                    'name' => Craft::t('craft-google-location', $field->name),
+                    'name' => Craft::t('site', $field->name),
                 ];
             }
 
             return [
                 'handle' => $block->handle,
-                'name' => Craft::t('craft-google-location', $block->name),
+                'name' => Craft::t('site', $block->name),
                 'fields' => $assoc,
             ];
         }, $blocks);
@@ -95,7 +98,7 @@ class Content extends Component
                 return [
                     'type' => 'matrix',
                     'handle' => $field->handle,
-                    'name' => Craft::t('craft-google-location', $field->name),
+                    'name' => Craft::t('site', $field->name),
                     'blocks' => $blocks,
                 ];
             }
@@ -103,7 +106,7 @@ class Content extends Component
             return [
                 'type' => 'location',
                 'handle' => $field->handle,
-                'name' => Craft::t('craft-google-location', $field->name),
+                'name' => Craft::t('site', $field->name),
             ];
         }, $fields);
 
@@ -127,7 +130,7 @@ class Content extends Component
 
             return [
                 'handle' => $type->handle,
-                'name' => Craft::t('craft-google-location', $type->name),
+                'name' => Craft::t('site', $type->name),
                 'fields' => $fields,
             ];
         }, $types);
@@ -147,7 +150,7 @@ class Content extends Component
         $sections = array_map(function($section) {
             return [
                 'handle' => $section->handle,
-                'name' => Craft::t('craft-google-location', $section->name),
+                'name' => Craft::t('site', $section->name),
                 'types' => $this->getEntryTypes($section->getEntryTypes()),
             ];
         }, Craft::$app->sections->getAllSections());
@@ -225,5 +228,114 @@ class Content extends Component
                 'label' => $field['name'],
             ];
         }, $type['fields']);
+    }
+
+    public function getMatrixBlocksOptions($sectionKey, $typeKey, $fieldKey) : array
+    {
+        if (empty($sectionKey) || empty($typeKey)) {
+            return [];
+        }
+
+        if (!array_key_exists($sectionKey, $this->sections)) {
+            return [];
+        }
+
+        $section = $this->sections[$sectionKey];
+
+        if (!array_key_exists($typeKey, $section['types'])) {
+            return [];
+        }
+
+        $type =  $section['types'][$typeKey];
+
+        if (!array_key_exists($fieldKey, $type['fields'])) {
+            return [];
+        }
+
+        $field = $type['fields'][$fieldKey];
+
+        if ($field['type'] === 'location') {
+            return [];
+        }
+
+        return array_map(function($block) {
+            return [
+                'value' => $block['handle'],
+                'label' => $block['name'],
+            ];
+        }, $field['blocks']);
+    }
+
+    public function getMatrixBlockFieldOptions($sectionKey, $typeKey, $fieldKey, $matrixBlockKey) : array
+    {
+        if (empty($sectionKey) || empty($typeKey)) {
+            return [];
+        }
+
+        if (!array_key_exists($sectionKey, $this->sections)) {
+            return [];
+        }
+
+        $section = $this->sections[$sectionKey];
+
+        if (!array_key_exists($typeKey, $section['types'])) {
+            return [];
+        }
+
+        $type =  $section['types'][$typeKey];
+
+        if (!array_key_exists($fieldKey, $type['fields'])) {
+            return [];
+        }
+
+        $field = $type['fields'][$fieldKey];
+
+        if ($field['type'] === 'location') {
+            return [];
+        }
+
+        if (!array_key_exists($matrixBlockKey, $field['blocks'])) {
+            return [];
+        }
+
+        $block = $field['blocks'][$matrixBlockKey];
+
+        return array_map(function($field) {
+            return [
+                'value' => $field['handle'],
+                'label' => $field['name'],
+            ];
+        }, $block['fields']);
+    }
+
+    public function getLocations($settings) : array
+    {
+        $entries = Entry::find()->section($settings['section'])->type($settings['type'])->all();
+        $locations = [];
+
+        foreach ($entries as $entry) {
+            $location = $entry[$settings['field']];
+            if ($location instanceof LocationModel) {
+                $locations[] = [
+                    'title' => $entry->title,
+                    'position' => [
+                        'lat' => floatval($location->lat),
+                        'lng' => floatval($location->lng),
+                    ],
+                ];
+            } else if ($location instanceof MatrixBlockQuery) {
+                foreach ($location->type($settings['matrixBlock'])->all() as $block) {
+                    $location = $block[$settings['matrixBlockField']];
+                    $locations[] = [
+                        'title' => $entry->title,
+                        'position' => [
+                            'lat' => floatval($location->lat),
+                            'lng' => floatval($location->lng),
+                        ],
+                    ];
+                }
+            }
+        }
+        return $locations;
     }
 }

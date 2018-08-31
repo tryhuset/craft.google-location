@@ -18,7 +18,6 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\helpers\Db;
-use craft\elements\Entry;
 use yii\db\Schema;
 use craft\helpers\Json;
 
@@ -80,6 +79,13 @@ class Area extends Field
         return Craft::t('craft-google-location', 'Google map area');
     }
 
+    public function getAttributeLabel($attribute): string
+    {
+        $label = parent::getAttributeLabel($attribute);
+
+        return Craft::t('craft-google-location', $label);
+    }
+
     /**
      * @inheritdoc
      */
@@ -95,13 +101,13 @@ class Area extends Field
 
         if ($this->markers) {
             $rules = array_merge($rules, [
-                [['section', 'type', 'field', 'fieldType'], 'required'],
+                [['section', 'type', 'field', 'fieldType'], 'required', 'message' => Craft::t('craft-google-location', '{attribute} cannot be blank.')],
             ]);
         }
 
         if ($this->fieldType === 'matrix') {
             $rules = array_merge($rules, [
-                [['matrixBlock', 'matrixBlockField'], 'required'],
+                [['matrixBlock', 'matrixBlockField'], 'required', 'message' => Craft::t('craft-google-location', '{attribute} cannot be blank.')],
             ]);
         }
 
@@ -143,31 +149,18 @@ class Area extends Field
         Craft::$app->getView()->registerAssetBundle(AreaSettingsAsset::class);
         $contentService = CraftGoogleLocation::getInstance()->content;
 
-        // getFieldType($this);
-
-        // /**
-        //  * @var string
-        //  */
-        // public $fieldType = '';
-        //
-        // /**
-        //  * @var string
-        //  */
-        // public $matrixBlock = '';
-        //
-        // /**
-        //  * @var string
-        //  */
-        // public $matrixBlockField = '';
-
         $prefix = Craft::$app->getView()->namespaceInputId('');
         $jsonVars = [
             'prefix' => $prefix,
-            'markers' => $this->markers,
             'sections' => $contentService->getOptions(),
-            'section' => $this->section,
-            'type' => $this->type,
-            'field' => $this->field,
+            'state' => [
+                'markers' => (!!$this->markers),
+                'section' => $this->section,
+                'type' => $this->type,
+                'field' => $this->field,
+                'matrixBlock' => $this->matrixBlock,
+                'matrixBlockField' => $this->matrixBlockField,
+            ],
         ];
         $jsonVars = Json::encode($jsonVars);
         Craft::$app->getView()->registerJs("$('#{$prefix}field').CraftGoogleLocationAreaSettings(" . $jsonVars . ");");
@@ -180,6 +173,8 @@ class Area extends Field
                 'sections' => $contentService->getSectionOptions(),
                 'types' => $contentService->getTypeOptions($this->section),
                 'fields' => $contentService->getFieldOptions($this->section, $this->type),
+                'matrixBlocks' => $contentService->getMatrixBlocksOptions($this->section, $this->type, $this->field),
+                'matrixBlockFields' => $contentService->getMatrixBlockFieldOptions($this->section, $this->type, $this->field, $this->matrixBlock),
             ]
         );
     }
@@ -191,19 +186,7 @@ class Area extends Field
     {
         $markers = [];
         if ($this->markers) {
-            $entries = Entry::find()->section($this->section)->type($this->type)->all();
-            foreach ($entries as $entry) {
-                $location = $entry[$this->field];
-                if ($location instanceof Model) {
-                    $markers[] = [
-                        'title' => $entry->title,
-                        'position' => [
-                            'lat' => floatval($location->lat),
-                            'lng' => floatval($location->lng),
-                        ],
-                    ];
-                }
-            }
+            $markers = $contentService = CraftGoogleLocation::getInstance()->content->getLocations($this->getSettings());
         }
 
         // Register our asset bundle

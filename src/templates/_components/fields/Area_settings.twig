@@ -17,7 +17,7 @@
 
 {{ forms.LightswitchField({
     label: 'Show markers'|t('craft-google-location'),
-    instructions: 'Turn on if you want to show markers from a entity type'|t('craft-google-location'),
+    instructions: 'Turn on if you want to show markers from a entity type.'|t('craft-google-location'),
     id: 'markers',
     name: 'markers',
     value: true,
@@ -33,7 +33,6 @@
 
     {{ forms.selectField({
         label: 'Section'|t('craft-google-location'),
-        instructions: 'Select section to get markers from'|t('craft-google-location'),
         id: 'section',
         name: 'section',
         options: sectionsOptions,
@@ -48,9 +47,7 @@
     }]|merge(types|default([])) %}
 
     {{ forms.selectField({
-        class: 'hidden',
         label: 'Entry type'|t('craft-google-location'),
-        instructions: 'Select Entry type to get markers from'|t('craft-google-location'),
         id: 'type',
         name: 'type',
         options: typesOptions,
@@ -65,9 +62,7 @@
     }]|merge(fields|default([])) %}
 
     {{ forms.selectField({
-        class: 'hidden',
         label: 'Field'|t('craft-google-location'),
-        instructions: 'Select field with marker position'|t('craft-google-location'),
         id: 'field',
         name: 'field',
         options: fieldsOptions,
@@ -89,9 +84,7 @@
         }]|merge(matrixBlocks|default([])) %}
 
         {{ forms.selectField({
-            class: 'hidden',
             label: 'Matrix block'|t('craft-google-location'),
-            instructions: 'Select matrix block to get markers from'|t('craft-google-location'),
             id: 'matrixBlock',
             name: 'matrixBlock',
             options: matrixBlockOptions,
@@ -106,9 +99,7 @@
         }]|merge(matrixBlockFields|default([])) %}
 
         {{ forms.selectField({
-            class: 'hidden',
             label: 'Matrix field'|t('craft-google-location'),
-            instructions: 'Select matrix field'|t('craft-google-location'),
             id: 'matrixBlockField',
             name: 'matrixBlockField',
             options: matrixBlockFieldOptions,
