@@ -26,6 +26,7 @@
         this.domReady = this.domReady.bind(this);
         this.onSectionChange = this.onSectionChange.bind(this);
         this.onTypeChange = this.onTypeChange.bind(this);
+        this.onFieldChange = this.onFieldChange.bind(this);
         this.init();
     }
 
@@ -36,15 +37,18 @@
 
         domReady: function() {
           var _this = this;
-          this.$fields = $(this.element);
           this.$switch = $('#'+this.options.prefix+'markers');
           this.$sections = $('#'+this.options.prefix+'section');
           this.$types = $('#'+this.options.prefix+'type');
+          this.$fields = $(this.element);
+          this.$fieldType = $('#'+this.options.prefix+'fieldType');
+          this.$matrixBlock = $('#'+this.options.prefix+'matrixBlock');
+          this.$matrixBlockField = $('#'+this.options.prefix+'matrixBlockField');
           var $container = $('#'+this.options.prefix+'container');
 
           this.selectedSection = this.options.section;
-          this.selectedtype = this.options.type;
-          this.selectedfield = this.options.field;
+          this.selectedType = this.options.type;
+          this.selectedField = this.options.field;
 
           if (this.options.markers) {
             $container.removeClass('hidden');
@@ -54,11 +58,11 @@
             this.$sections.parent().removeClass('hidden');
           }
 
-          if (this.selectedtype) {
+          if (this.selectedType) {
             this.$types.parent().removeClass('hidden');
           }
 
-          if (this.selectedfield) {
+          if (this.selectedField) {
             this.$fields.parent().removeClass('hidden');
           }
 
@@ -72,44 +76,81 @@
 
           this.$sections.on('change', this.onSectionChange);
           this.$types.on('change', this.onTypeChange);
+          this.$fields.on('change', this.onFieldChange);
         },
 
         onSectionChange: function(e) {
           this.selectedSection = e.target.value;
-          this.$types.find('option').remove();
-          this.$fields.find('option').remove();
-          this.$fields.parent().addClass('hidden');
+          this.clearOptions(this.$types);
+          this.clearOptions(this.$fields);
+          // this.$types.find('option').remove();
+          // this.$fields.find('option').remove();
+          // this.$fields.parent().addClass('hidden');
 
           if (this.selectedSection !== '') {
             var section = this.options.sections[this.selectedSection];
-            this.$types.append('<option value="">'+section.label+'</option>');
 
             for (var key in section.types) {
               if (section.types.hasOwnProperty(key)) {
-                this.$types.append('<option value="'+key+'">'+section.types[key].label+'</option>');
+                console.log(key, section.types[key]);
+                this.$types.append('<option value="'+key+'">'+section.types[key].name+'</option>');
               }
             }
-            this.$types.parent().removeClass('hidden');
+            // this.$types.parent().removeClass('hidden');
           } else {
-            this.$types.parent().addClass('hidden');
+            // this.$types.parent().addClass('hidden');
           }
         },
 
         onTypeChange: function(e) {
           this.selectedType = e.target.value;
+          this.clearOptions(this.$fields);
 
-          this.$fields.find('option').remove();
           if (this.selectedType !== '') {
             var type = this.options.sections[this.selectedSection].types[this.selectedType];
-            var _this = this;
-            type.fields.forEach(function(field) {
-              _this.$fields.append('<option value="'+field.handle+'">'+field.label+'</option>');
-            });
-            this.$fields.parent().removeClass('hidden');
+            for (var key in type.fields) {
+              if (type.fields.hasOwnProperty(key)) {
+                this.$fields.append('<option value="'+key+'">'+type.fields[key].name+'</option>');
+              }
+            }
+            // this.$fields.parent().removeClass('hidden');
           } else {
-            this.$fields.parent().addClass('hidden');
+            // this.$fields.parent().addClass('hidden');
           }
-        }
+        },
+
+        onFieldChange: function(e) {
+          this.selectedField = e.target.value;
+          console.log(this.selectedSection);
+          console.log(this.selectedType);
+          console.log(this.selectedField);
+          if (this.selectedField !== '') {
+
+            var field = this.options
+              .sections[this.selectedSection]
+              .types[this.selectedType]
+              .fields[this.selectedField]
+            ;
+            this.$fieldType.val(field.type);
+
+            // for (var key in type.fields) {
+            //   if (type.fields.hasOwnProperty(key)) {
+            //     this.$fields.append('<option value="'+key+'">'+type.fields[key].name+'</option>');
+            //   }
+            // }
+            // this.$fields.parent().removeClass('hidden');
+          } else {
+            // this.$fields.parent().addClass('hidden');
+          }
+        },
+
+        clearOptions: function($select) {
+          $select.find('option').each(function() {
+            if (this.value) {
+              $(this).remove();
+            }
+          });
+        },
     };
 
     // A really lightweight plugin wrapper around the constructor,

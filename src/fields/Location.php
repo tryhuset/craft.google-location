@@ -114,17 +114,8 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function serializeValue($value, ElementInterface $element = null)
-    {
-        return parent::serializeValue($value, $element);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSettingsHtml()
     {
-        dd(CraftGoogleLocation::getInstance());
         $countries = CraftGoogleLocation::getInstance()->country->getCountries();
         array_unshift($countries, [
             'value' => null,
@@ -145,8 +136,7 @@ class Location extends Field
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        // $countries = CraftGoogleLocation::getInstance()->country->getCountries();
-        dd(CraftGoogleLocation::getInstance());
+        $countries = CraftGoogleLocation::getInstance()->country->getCountries();
 
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(LocationFieldAsset::class);

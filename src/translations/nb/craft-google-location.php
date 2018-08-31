@@ -25,6 +25,8 @@ return [
     'Click on the {icon} icon to draw a new area.' => 'Klikk på {icon} ikonet for å markere ett nytt område.',
     'Click on the {icon} icon to move or shange area.' => 'Klipp på {icon} ikonet for å flytte på, eller endre formen på området.',
     'Right click on the area to remove it.' => 'Høyreklikk på området for å fjerne det.',
+    'Select section' => 'Velg Seksjon',
+    'Select entry type' => 'Velg artikkeltype',
 
     'Norway' => 'Norge',
     'United Arab Emirates' => 'De forente arabiske emirater ',

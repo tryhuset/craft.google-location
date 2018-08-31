@@ -54,6 +54,21 @@ class Area extends Field
      */
     public $field = '';
 
+    /**
+     * @var string
+     */
+    public $fieldType = 'location';
+
+    /**
+     * @var string
+     */
+    public $matrixBlock = '';
+
+    /**
+     * @var string
+     */
+    public $matrixBlockField = '';
+
     // Static Methods
     // =========================================================================
 
@@ -73,14 +88,20 @@ class Area extends Field
         $rules = parent::rules();
         $rules = array_merge($rules, [
             ['markers', 'boolean'],
-            [['section', 'type', 'field'], 'string'],
-            [['section', 'type', 'field'], 'default', 'value' => null],
+            [['section', 'type', 'field', 'fieldType', 'matrixBlock', 'matrixBlockField'], 'string'],
+            [['section', 'type', 'field', 'fieldType', 'matrixBlock', 'matrixBlockField'], 'default', 'value' => null],
             ['markers', 'default', 'value' => false],
         ]);
 
         if ($this->markers) {
             $rules = array_merge($rules, [
-                [['section', 'type', 'field'], 'required'],
+                [['section', 'type', 'field', 'fieldType'], 'required'],
+            ]);
+        }
+
+        if ($this->fieldType === 'matrix') {
+            $rules = array_merge($rules, [
+                [['matrixBlock', 'matrixBlockField'], 'required'],
             ]);
         }
 
@@ -120,21 +141,30 @@ class Area extends Field
     public function getSettingsHtml()
     {
         Craft::$app->getView()->registerAssetBundle(AreaSettingsAsset::class);
-        $locationFields = CraftGoogleLocation::getInstance()->content->getLocationsFields();
-        d($locationFields);
-        $sections = [[
-            'value' => '',
-            'label' => Craft::t('craft-google-location', 'Select section'),
-        ]];
-        $jssections = [];
-        $types = [];
-        $fields = [];
+        $contentService = CraftGoogleLocation::getInstance()->content;
+
+        // getFieldType($this);
+
+        // /**
+        //  * @var string
+        //  */
+        // public $fieldType = '';
+        //
+        // /**
+        //  * @var string
+        //  */
+        // public $matrixBlock = '';
+        //
+        // /**
+        //  * @var string
+        //  */
+        // public $matrixBlockField = '';
 
         $prefix = Craft::$app->getView()->namespaceInputId('');
         $jsonVars = [
             'prefix' => $prefix,
             'markers' => $this->markers,
-            'sections' => $jssections,
+            'sections' => $contentService->getOptions(),
             'section' => $this->section,
             'type' => $this->type,
             'field' => $this->field,
@@ -147,9 +177,9 @@ class Area extends Field
             'craft-google-location/_components/fields/Area_settings',
             [
                 'field' => $this,
-                'sections' => $sections,
-                'types' => $types,
-                'fields' => $fields,
+                'sections' => $contentService->getSectionOptions(),
+                'types' => $contentService->getTypeOptions($this->section),
+                'fields' => $contentService->getFieldOptions($this->section, $this->type),
             ]
         );
     }

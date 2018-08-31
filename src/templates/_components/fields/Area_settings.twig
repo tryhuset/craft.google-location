@@ -26,15 +26,26 @@
 }) }}
 
 <div id="container" class="hidden">
+    {% set sectionsOptions = [{
+        label: ('Select section'|t('craft-google-location')),
+        value: '',
+    }]|merge(sections|default([])) %}
+
     {{ forms.selectField({
         label: 'Section'|t('craft-google-location'),
         instructions: 'Select section to get markers from'|t('craft-google-location'),
         id: 'section',
         name: 'section',
-        options: sections|default([]),
+        options: sectionsOptions,
         value: (field['section']|default('')),
         errors: field.getErrors('section'),
     })}}
+
+
+    {% set typesOptions = [{
+        label: ('Select entry type'|t('craft-google-location')),
+        value: '',
+    }]|merge(types|default([])) %}
 
     {{ forms.selectField({
         class: 'hidden',
@@ -42,10 +53,16 @@
         instructions: 'Select Entry type to get markers from'|t('craft-google-location'),
         id: 'type',
         name: 'type',
-        options: types|default([]),
+        options: typesOptions,
         value: (field['type']|default('')),
         errors: field.getErrors('type'),
     })}}
+
+
+    {% set fieldsOptions = [{
+        label: ('Select field'|t('craft-google-location')),
+        value: '',
+    }]|merge(fields|default([])) %}
 
     {{ forms.selectField({
         class: 'hidden',
@@ -53,8 +70,50 @@
         instructions: 'Select field with marker position'|t('craft-google-location'),
         id: 'field',
         name: 'field',
-        options: fields|default([]),
+        options: fieldsOptions,
         value: (field['field']|default('')),
         errors: field.getErrors('field'),
-    })}}
+    }) }}
+
+    {{ forms.hidden({
+        id: 'fieldType',
+        name: 'fieldType',
+        value: (field['fieldType']|default('')),
+    }) }}
+
+
+    <div id="matrix-container" class="hidden">
+        {% set matrixBlockOptions = [{
+            label: ('Select matrix block'|t('craft-google-location')),
+            value: '',
+        }]|merge(matrixBlocks|default([])) %}
+
+        {{ forms.selectField({
+            class: 'hidden',
+            label: 'Matrix block'|t('craft-google-location'),
+            instructions: 'Select matrix block to get markers from'|t('craft-google-location'),
+            id: 'matrixBlock',
+            name: 'matrixBlock',
+            options: matrixBlockOptions,
+            value: (field['matrixBlock']|default('')),
+            errors: field.getErrors('matrixBlock'),
+        }) }}
+
+
+        {% set matrixBlockFieldOptions = [{
+            label: ('Select matrix field'|t('craft-google-location')),
+            value: '',
+        }]|merge(matrixBlockFields|default([])) %}
+
+        {{ forms.selectField({
+            class: 'hidden',
+            label: 'Matrix field'|t('craft-google-location'),
+            instructions: 'Select matrix field'|t('craft-google-location'),
+            id: 'matrixBlockField',
+            name: 'matrixBlockField',
+            options: matrixBlockFieldOptions,
+            value: (field['matrixBlockField']|default('')),
+            errors: field.getErrors('matrixBlockField'),
+        }) }}
+    </div>
 </div>
