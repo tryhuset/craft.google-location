@@ -21,13 +21,13 @@
         id: name~'-country',
         name: name~'[country]',
         options: countries,
-        value: value.country
+        value: value.country.code
     })}}
 {% else %}
     {{ forms.hidden({
         id: name~'-country',
         name: name~'[country]',
-        value: value.country,
+        value: value.country.code,
     })}}
 {% endif %}
 

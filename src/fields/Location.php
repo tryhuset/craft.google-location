@@ -19,8 +19,9 @@ use craft\base\Field;
 use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
-
 use apt\craftgooglelocation\models\Location as Model;
+use apt\craftcountries\CraftCountries;
+use apt\craftcountries\models\Country;
 
 /**
  * @author    Thomas Sømoen
@@ -31,6 +32,8 @@ class Location extends Field
 {
     // Public Properties
     // =========================================================================
+
+    private $countries = [];
 
     /**
      * @var string
@@ -63,6 +66,14 @@ class Location extends Field
             $config['address'] = (bool)$config['address'];
         }
         parent::__construct($config);
+
+        $countries = CraftCountries::getInstance()->service->getCountries();
+        $this->countries = array_map(function($country) {
+            return [
+                'value' => $country->code,
+                'label' => $country->name,
+            ];
+        }, $countries);
     }
 
     /**
@@ -78,6 +89,24 @@ class Location extends Field
             ['address', 'default', 'value' => false],
         ]);
         return $rules;
+    }
+
+    public function validateLocation($model) {
+        $success = $model->{$this->handle}->validate();
+        if (!$success) {
+            $errors = $model->{$this->handle}->getFirstErrors();
+            foreach ($errors as $error) {
+                $model->addError($this->handle, $error);
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementValidationRules(): array
+    {
+        return ['validateLocation'];
     }
 
     /**
@@ -98,15 +127,18 @@ class Location extends Field
         }
 
         if (is_array($value)) {
+            $value['country'] = CraftCountries::getInstance()->service->getCountryByCode($value['country']);
             return new Model($value);
         }
 
         if (is_string($value)) {
-            $json = json_decode($value, true);
-            if ($json) {
-                return new Model($json);
+            $data = json_decode($value, true);
+            if ($data) {
+                $data['country'] = CraftCountries::getInstance()->service->getCountryByCode($data['country']);
+                return new Model($data);
             }
         }
+
 
         return new Model();
     }
@@ -114,9 +146,22 @@ class Location extends Field
     /**
      * @inheritdoc
      */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        if ($value['country'] instanceof Country) {
+            $value['country'] = $value['country']->code;
+        }
+
+        return parent::serializeValue($value, $element);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getSettingsHtml()
     {
-        $countries = CraftGoogleLocation::getInstance()->country->getCountries();
+        $countries = $this->countries;
+
         array_unshift($countries, [
             'value' => null,
             'label' => Craft::t('craft-google-location', 'All countries'),
@@ -136,8 +181,6 @@ class Location extends Field
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $countries = CraftGoogleLocation::getInstance()->country->getCountries();
-
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(LocationFieldAsset::class);
 
@@ -146,7 +189,7 @@ class Location extends Field
         $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
         if ($this->country) {
-            $value['country'] = $this->country;
+            $value['country'] = CraftCountries::getInstance()->service->getCountryByCode($this->country);
         }
 
         // Variables to pass down to our field JavaScript to let it namespace properly
@@ -170,7 +213,7 @@ class Location extends Field
                 'field' => $this,
                 'id' => $id,
                 'namespacedId' => $namespacedId,
-                'countries' => $countries,
+                'countries' => $this->countries,
                 'showCountries' => (!$this->country),
                 'showAddress' => $this->address,
             ]

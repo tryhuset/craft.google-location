@@ -10,10 +10,12 @@
 
 namespace apt\craftgooglelocation\models;
 
-use apt\craftgooglelocation\CraftGoogleLocation;
-
 use Craft;
 use craft\base\Model;
+use apt\craftgooglelocation\CraftGoogleLocation;
+use apt\craftcountries\CraftCountries;
+use apt\craftcountries\models\Country;
+
 
 const DEFAULT_COUNTRY = 'NO';
 const DEFAULT_ZOOM = 10;
@@ -31,7 +33,7 @@ class Location extends Model
     /**
      * @var string
      */
-    public $country = DEFAULT_COUNTRY;
+    public $country = null;
 
     /**
      * @var string
@@ -56,24 +58,41 @@ class Location extends Model
     // Public Methods
     // =========================================================================
 
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+        if (empty($this->country)) {
+            $this->country = CraftCountries::getInstance()->service->getCountryByCode(DEFAULT_COUNTRY);
+        } else {
+            if (!$this->country instanceof Country) {
+                $this->country = CraftCountries::getInstance()->service->getCountryByCode($this->country);
+            }
+        }
+    }
+
+    public function validateCountry()
+    {
+        if (!$this->country instanceof Country) {
+            $this->addError('country', Craft::t('site', 'Invalid country'));
+        }
+    }
+
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
+        $defaultCountry = CraftCountries::getInstance()->service->getCountryByCode(DEFAULT_COUNTRY);
         return [
             [['lat', 'lng', 'zoom'], 'number'],
-            [['country', 'address'], 'string'],
-            ['country', 'default', 'value' => DEFAULT_COUNTRY],
+            ['address', 'string'],
+            ['country', 'validateCountry'],
+            ['country', 'default', 'value' => $defaultCountry],
             ['address', 'default', 'value' => ''],
             ['lat', 'default', 'value' => null],
             ['lng', 'default', 'value' => null],
             ['zoom', 'default', 'value' => DEFAULT_ZOOM],
         ];
-    }
-
-    public function getCountryName()
-    {
-        return CraftGoogleLocation::getInstance()->country->getCountryName($this->country);
     }
 }
