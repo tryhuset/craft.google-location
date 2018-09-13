@@ -13,7 +13,7 @@ namespace apt\craftgooglelocation\models;
 use Craft;
 use craft\base\Model;
 use apt\craftgooglelocation\CraftGoogleLocation;
-use apt\craftcountries\CraftCountries;
+use apt\craftcountries\services\Service as CountryService;
 use apt\craftcountries\models\Country;
 
 
@@ -27,8 +27,7 @@ const DEFAULT_ZOOM = 10;
  */
 class Location extends Model
 {
-    // Public Properties
-    // =========================================================================
+    private $countryService;
 
     /**
      * @var string
@@ -61,11 +60,13 @@ class Location extends Model
     public function __construct($config = [])
     {
         parent::__construct($config);
+        $this->countryService = new CountryService();
+
         if (empty($this->country)) {
-            $this->country = CraftCountries::getInstance()->service->getCountryByCode(DEFAULT_COUNTRY);
+            $this->country = $this->countryService->getCountryByCode(DEFAULT_COUNTRY);
         } else {
             if (!$this->country instanceof Country) {
-                $this->country = CraftCountries::getInstance()->service->getCountryByCode($this->country);
+                $this->country = $this->countryService->getCountryByCode($this->country);
             }
         }
     }
@@ -83,7 +84,7 @@ class Location extends Model
      */
     public function rules()
     {
-        $defaultCountry = CraftCountries::getInstance()->service->getCountryByCode(DEFAULT_COUNTRY);
+        $defaultCountry = $this->countryService->getCountryByCode(DEFAULT_COUNTRY);
         return [
             [['lat', 'lng', 'zoom'], 'number'],
             ['address', 'string'],
