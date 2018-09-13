@@ -22,6 +22,10 @@ To install the plugin, follow these instructions.
           ...,
           {
             "type": "vcs",
+            "url": "https://git1.apt.no/open/craft-countries-module.git"
+          },
+          {
+            "type": "vcs",
             "url": "https://git1.apt.no/open/craft-google-location.git"
           }
         ],
