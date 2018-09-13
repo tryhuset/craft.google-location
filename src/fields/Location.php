@@ -20,6 +20,7 @@ use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
 use apt\craftgooglelocation\models\Location as Model;
+use apt\craftcountriesmodule\CraftCountriesModule;
 use apt\craftcountriesmodule\models\Country;
 
 /**
@@ -74,6 +75,7 @@ class Location extends Field
     public function init()
     {
         parent::init();
+        CraftCountriesModule::register();
         $this->countryService = Craft::$app->getModule('countries')->service;
 
         $countries = $this->countryService->getCountries();

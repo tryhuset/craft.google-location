@@ -13,6 +13,7 @@ namespace apt\craftgooglelocation\models;
 use Craft;
 use craft\base\Model;
 use apt\craftgooglelocation\CraftGoogleLocation;
+use apt\craftcountriesmodule\CraftCountriesModule;
 use apt\craftcountriesmodule\models\Country;
 
 
@@ -59,6 +60,7 @@ class Location extends Model
     public function __construct($config = [])
     {
         parent::__construct($config);
+        CraftCountriesModule::register();
         $this->countryService = Craft::$app->getModule('countries')->service;
 
         if (empty($this->country)) {
