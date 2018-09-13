@@ -76,14 +76,14 @@ class Area extends Field
      */
     public static function displayName(): string
     {
-        return Craft::t('craft-google-location', 'Google map area');
+        return Craft::t('google-location', 'Google map area');
     }
 
     public function getAttributeLabel($attribute): string
     {
         $label = parent::getAttributeLabel($attribute);
 
-        return Craft::t('craft-google-location', $label);
+        return Craft::t('google-location', $label);
     }
 
     /**
@@ -101,13 +101,13 @@ class Area extends Field
 
         if ($this->markers) {
             $rules = array_merge($rules, [
-                [['section', 'type', 'field', 'fieldType'], 'required', 'message' => Craft::t('craft-google-location', '{attribute} cannot be blank.')],
+                [['section', 'type', 'field', 'fieldType'], 'required', 'message' => Craft::t('google-location', '{attribute} cannot be blank.')],
             ]);
         }
 
         if ($this->fieldType === 'matrix') {
             $rules = array_merge($rules, [
-                [['matrixBlock', 'matrixBlockField'], 'required', 'message' => Craft::t('craft-google-location', '{attribute} cannot be blank.')],
+                [['matrixBlock', 'matrixBlockField'], 'required', 'message' => Craft::t('google-location', '{attribute} cannot be blank.')],
             ]);
         }
 
@@ -167,7 +167,7 @@ class Area extends Field
 
         // Render the settings template
         return Craft::$app->getView()->renderTemplate(
-            'craft-google-location/_components/fields/Area_settings',
+            'google-location/_components/fields/Area_settings',
             [
                 'field' => $this,
                 'sections' => $contentService->getSectionOptions(),
@@ -210,7 +210,7 @@ class Area extends Field
 
         // Render the input template
         return Craft::$app->getView()->renderTemplate(
-            'craft-google-location/_components/fields/Area_input',
+            'google-location/_components/fields/Area_input',
             [
                 'name' => $this->handle,
                 'value' => $value,

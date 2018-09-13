@@ -17,7 +17,7 @@
 
 {% if showCountries|default(false) %}
     {{ forms.selectField({
-        label: 'Country'|t('craft-google-location'),
+        label: 'Country'|t('google-location'),
         id: name~'-country',
         name: name~'[country]',
         options: countries,
@@ -34,14 +34,14 @@
 {% if showAddress|default(false) %}
     <div class="apt-google-location-address">
         {{ forms.textareaField({
-            label: 'Address'|t('craft-google-location'),
+            label: 'Address'|t('google-location'),
             id: name~'-address',
             name: name~'[address]',
             value: value.address,
             rows: 5,
         })}}
         <div class="buttons">
-            <button class="btn btn-primary icon search" id="{{ name }}-lookup" type="button">{{ 'Lookup address'|t('craft-google-location') }}</button>
+            <button class="btn btn-primary icon search" id="{{ name }}-lookup" type="button">{{ 'Lookup address'|t('google-location') }}</button>
         </div>
     </div>
 {% else %}

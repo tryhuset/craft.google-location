@@ -4,34 +4,31 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d33394b13605b6847281dffd25d3c4fa",
+    "content-hash": "e257182baee26f863c2c440632275d08",
     "packages": [
         {
-            "name": "apt/craft-countries",
+            "name": "apt/craft-countries-module",
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://git1.apt.no/open/craft-countries.git",
-                "reference": "d7511d5a974ba29f9ad854115d6e56a8af3945a4"
+                "url": "https://git1.apt.no/open/craft-countries-module.git",
+                "reference": "29af3da367020dad592aff7b080968be9abf6aaf"
             },
             "require": {
-                "craftcms/cms": "^3.0.0-RC1"
+                "craftcms/cms": "3.0.*"
             },
-            "type": "craft-plugin",
+            "type": "craft-module",
             "extra": {
-                "name": "Craft Countries",
-                "handle": "craft-countries",
+                "name": "Craft Countries Module",
+                "handle": "craft-countries-module",
                 "hasCpSettings": false,
                 "hasCpSection": false,
-                "changelogUrl": "https://git1.apt.no/open/craft-countries/craft-countries/blob/master/CHANGELOG.md",
-                "components": {
-                    "service": "apt\\craftcountries\\services\\Service"
-                },
-                "class": "apt\\craftcountries\\CraftCountries"
+                "changelogUrl": "https://git1.apt.no/open/craft-countries-modules/craft-countries-modules/blob/master/CHANGELOG.md",
+                "class": "apt\\craftcountriesmodule\\CraftCountriesModule"
             },
             "autoload": {
                 "psr-4": {
-                    "apt\\craftcountries\\": "src/"
+                    "apt\\craftcountriesmodule\\": "src/"
                 }
             },
             "license": [
@@ -43,19 +40,15 @@
                     "homepage": "https://apt.no/"
                 }
             ],
-            "description": "Add country select field and expose list of countries to frontend",
+            "description": "Add list of countries",
             "keywords": [
                 "cms",
                 "craft",
                 "craft countries",
-                "craft-plugin",
+                "craft-module",
                 "craftcms"
             ],
-            "support": {
-                "docs": "https://git1.apt.no/open/craft-countries/craft-countries/blob/master/README.md",
-                "issues": "https://git1.apt.no/open/craft-countries/craft-countries/issues"
-            },
-            "time": "2018-09-12T10:19:39+00:00"
+            "time": "2018-09-13T10:15:03+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -2749,9 +2742,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "craftcms/cms": 5
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

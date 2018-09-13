@@ -16,8 +16,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.selectField({
-    label: 'Country'|t('craft-google-location'),
-    instructions: 'Select a country if you want to limit the map to a country. If not, leave it as it is.'|t('craft-google-location'),
+    label: 'Country'|t('google-location'),
+    instructions: 'Select a country if you want to limit the map to a country. If not, leave it as it is.'|t('google-location'),
     id: 'country',
     name: 'country',
     options: countries,
@@ -25,8 +25,8 @@
 })}}
 
 {{ forms.lightswitchField({
-    label: 'Address search'|t('craft-google-location'),
-    instructions: 'Turn on if you want an address field with search option.'|t('craft-google-location'),
+    label: 'Address search'|t('google-location'),
+    instructions: 'Turn on if you want an address field with search option.'|t('google-location'),
     id: 'address',
     name: 'address',
     on: field['address'],

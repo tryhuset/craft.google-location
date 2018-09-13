@@ -14,9 +14,11 @@
  * @since     1.0.0
  */
 return [
+    'Craft Google Location plugin loaded' => 'Craft Google Location plugin ble lastet',
+    'Api key' => 'Api nøkkel',
+    'Get api key by following this documentation.' => 'Generer api nøkkel ved å følge denne dokumentasjonen',
     'Google map address location' => 'Google-kart adresseposisjon',
     'Google map area' => 'Google-kart område',
-    'Craft Google Location plugin loaded' => 'Craft Google Location plugin ble lastet',
     'All countries' => 'Alle land',
     'Select a country if you want to limit the map to a country. If not, leave it as it is.' => 'Velg ett land dersom du ønsker å begrense kartet til ett land. Hvis ikke la feltet være som det er.',
     'Location' => 'Sted',

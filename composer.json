@@ -11,7 +11,7 @@
         "craft google location"
     ],
     "support": {
-        "docs": "https://git1.apt.no/open/craft-google-location",
+        "docs": "https://git1.apt.no/open/craft-google-location/blob/master/README.md",
         "issues": "https://git1.apt.no/open/craft-google-location/issues"
     },
     "license": "MIT",
@@ -24,12 +24,12 @@
     "repositories": [
       {
         "type": "vcs",
-        "url": "https://git1.apt.no/open/craft-countries.git"
+        "url": "https://git1.apt.no/open/craft-countries-module.git"
       }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC1",
-        "apt/craft-countries": "^1.0"
+        "craftcms/cms": "3.0.*",
+        "apt/craft-countries-module": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -37,13 +37,12 @@
         }
     },
     "extra": {
-        "name": "Craft Google Location",
-        "handle": "craft-google-location",
+        "name": "Google Location",
+        "handle": "google-location",
         "hasCpSettings": true,
         "hasCpSection": false,
         "changelogUrl": "https://git1.apt.no/open/craft-google-location",
         "components": {
-            "country": "apt\\craftgooglelocation\\services\\Country",
             "content": "apt\\craftgooglelocation\\services\\Content"
         },
         "class": "apt\\craftgooglelocation\\CraftGoogleLocation"

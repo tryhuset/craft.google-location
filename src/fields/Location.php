@@ -20,8 +20,7 @@ use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
 use apt\craftgooglelocation\models\Location as Model;
-use apt\craftcountries\CraftCountries;
-use apt\craftcountries\models\Country;
+use apt\craftcountriesmodule\models\Country;
 
 /**
  * @author    Thomas Sømoen
@@ -30,10 +29,9 @@ use apt\craftcountries\models\Country;
  */
 class Location extends Field
 {
-    // Public Properties
-    // =========================================================================
+    protected $countryService;
 
-    private $countries = [];
+    protected $countries = [];
 
     /**
      * @var string
@@ -53,7 +51,7 @@ class Location extends Field
      */
     public static function displayName(): string
     {
-        return Craft::t('craft-google-location', 'Google map address location');
+        return Craft::t('google-location', 'Google map address location');
     }
 
     // Public Methods
@@ -67,7 +65,18 @@ class Location extends Field
         }
         parent::__construct($config);
 
-        $countries = CraftCountries::getInstance()->service->getCountries();
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->countryService = Craft::$app->getModule('countries')->service;
+
+        $countries = $this->countryService->getCountries();
         $this->countries = array_map(function($country) {
             return [
                 'value' => $country->code,
@@ -127,14 +136,14 @@ class Location extends Field
         }
 
         if (is_array($value)) {
-            $value['country'] = CraftCountries::getInstance()->service->getCountryByCode($value['country']);
+            $value['country'] = $this->countryService->getCountryByCode($value['country']);
             return new Model($value);
         }
 
         if (is_string($value)) {
             $data = json_decode($value, true);
             if ($data) {
-                $data['country'] = CraftCountries::getInstance()->service->getCountryByCode($data['country']);
+                $data['country'] = $this->countryService->getCountryByCode($data['country']);
                 return new Model($data);
             }
         }
@@ -164,11 +173,11 @@ class Location extends Field
 
         array_unshift($countries, [
             'value' => null,
-            'label' => Craft::t('craft-google-location', 'All countries'),
+            'label' => Craft::t('google-location', 'All countries'),
         ]);
         // Render the settings template
         return Craft::$app->getView()->renderTemplate(
-            'craft-google-location/_components/fields/Location_settings',
+            'google-location/_components/fields/Location_settings',
             [
                 'field' => $this,
                 'countries' => $countries,
@@ -189,7 +198,7 @@ class Location extends Field
         $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
         if ($this->country) {
-            $value['country'] = CraftCountries::getInstance()->service->getCountryByCode($this->country);
+            $value['country'] = $this->countryService->getCountryByCode($this->country);
         }
 
         // Variables to pass down to our field JavaScript to let it namespace properly
@@ -206,7 +215,7 @@ class Location extends Field
 
         // Render the input template
         return Craft::$app->getView()->renderTemplate(
-            'craft-google-location/_components/fields/Location_input',
+            'google-location/_components/fields/Location_input',
             [
                 'name' => $this->handle,
                 'value' => $value,

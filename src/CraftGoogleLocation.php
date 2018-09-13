@@ -10,12 +10,6 @@
 
 namespace apt\craftgooglelocation;
 
-use apt\craftgooglelocation\services\Country as CountryService;
-use apt\craftgooglelocation\services\Content as ContentService;
-use apt\craftgooglelocation\models\Settings;
-use apt\craftgooglelocation\fields\Location as LocationField;
-use apt\craftgooglelocation\fields\Area as AreaField;
-
 use Craft;
 use craft\base\Plugin;
 use craft\services\Plugins;
@@ -24,6 +18,13 @@ use craft\services\Fields;
 use craft\events\RegisterComponentTypesEvent;
 
 use yii\base\Event;
+
+use apt\craftgooglelocation\services\Country as CountryService;
+use apt\craftgooglelocation\services\Content as ContentService;
+use apt\craftgooglelocation\models\Settings;
+use apt\craftgooglelocation\fields\Location as LocationField;
+use apt\craftgooglelocation\fields\Area as AreaField;
+use apt\craftcountriesmodule\CraftCountriesModule;
 
 /**
  * Class CraftGoogleLocation
@@ -62,6 +63,7 @@ class CraftGoogleLocation extends Plugin
     public function init()
     {
         parent::init();
+        CraftCountriesModule::register();
         self::$plugin = $this;
 
         Event::on(
@@ -84,7 +86,7 @@ class CraftGoogleLocation extends Plugin
 
         Craft::info(
             Craft::t(
-                'craft-google-location',
+                'google-location',
                 '{name} plugin loaded',
                 ['name' => $this->name]
             ),
@@ -109,7 +111,7 @@ class CraftGoogleLocation extends Plugin
     protected function settingsHtml(): string
     {
         return Craft::$app->view->renderTemplate(
-            'craft-google-location/settings',
+            'google-location/settings',
             [
                 'settings' => $this->getSettings()
             ]
