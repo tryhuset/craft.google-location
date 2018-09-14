@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e257182baee26f863c2c440632275d08",
+    "content-hash": "a13842d07ea90ea1815e32a8936260de",
     "packages": [
         {
             "name": "apt/craft-countries-module",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git1.apt.no/open/craft-countries-module.git",
-                "reference": "29af3da367020dad592aff7b080968be9abf6aaf"
+                "reference": "9b4315f1d24bf4be9a9aa8660cdb47c83fb707e1"
             },
             "require": {
                 "craftcms/cms": "3.0.*"
@@ -48,7 +48,7 @@
                 "craft-module",
                 "craftcms"
             ],
-            "time": "2018-09-13T10:15:03+00:00"
+            "time": "2018-09-14T09:34:12+00:00"
         },
         {
             "name": "cebe/markdown",
