@@ -59,6 +59,11 @@ class Location extends Model
 
     public function __construct($config = [])
     {
+        if (array_key_exists('position', $config)) {
+            $config['lat'] = $config['position']['lat'];
+            $config['lng'] = $config['position']['lng'];
+            unset($config['position']);
+        }
         parent::__construct($config);
         CraftCountriesModule::register();
         $this->countryService = Craft::$app->getModule('countries')->service;
