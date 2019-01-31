@@ -28,7 +28,7 @@
     }
   ],
   "require": {
-    "craftcms/cms": "^3.0.*",
+    "craftcms/cms": "^3.0",
     "apt/craft-countries-module": "^1.0"
   },
   "autoload": {
