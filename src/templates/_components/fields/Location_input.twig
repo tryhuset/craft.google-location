@@ -15,19 +15,21 @@
 
 {% import "_includes/forms" as forms %}
 
+{% set countryCode = value.country.code is defined ? value.country.code : value.country %}
+
 {% if showCountries|default(false) %}
     {{ forms.selectField({
         label: 'Country'|t('google-location'),
         id: name~'-country',
         name: name~'[country]',
         options: countries,
-        value: value.country.code
+        value: countryCode
     })}}
 {% else %}
     {{ forms.hidden({
         id: name~'-country',
         name: name~'[country]',
-        value: value.country.code,
+        value: countryCode,
     })}}
 {% endif %}
 
