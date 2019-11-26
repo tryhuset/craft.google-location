@@ -24,6 +24,8 @@ return [
     'Location' => 'Sted',
     'Country' => 'Land',
     'Address' => 'Adresse',
+    'Latitude' => 'Breddegrad',
+    'Longitude' => 'Lengdegrad',
     'Lookup address' => 'Slå opp adressen',
     'Search places' => 'Søk på steder',
     'Click on the {icon} icon to draw a new area.' => 'Klikk på {icon} ikonet for å markere ett nytt område.',
@@ -46,4 +48,6 @@ return [
     '{attribute} cannot be blank.' => 'Du må velge {attribute}',
     'Du må velge Artikkeltype' => 'Du må velge artikkeltype',
     'Type cannot be blank.' => 'Du må velge artikkeltype',
+    'Select country' => 'Velg land',
+    'Select zoom level' => 'Velg zoom-nivå',
 ];

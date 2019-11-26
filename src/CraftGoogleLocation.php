@@ -24,6 +24,7 @@ use apt\craftgooglelocation\services\Content as ContentService;
 use apt\craftgooglelocation\models\Settings;
 use apt\craftgooglelocation\fields\Location as LocationField;
 use apt\craftgooglelocation\fields\Area as AreaField;
+use apt\craftgooglelocation\integrations\feedme\Location as FeedMeLocation;
 use apt\craftcountriesmodule\CraftCountriesModule;
 
 /**
@@ -84,6 +85,15 @@ class CraftGoogleLocation extends Plugin
             }
         );
 
+        if (class_exists(\craft\feedme\Plugin::class))
+		{
+			Event::on(
+				\craft\feedme\services\Fields::class,
+				\craft\feedme\services\Fields::EVENT_REGISTER_FEED_ME_FIELDS,
+				[$this, 'onRegisterFeedMeFields']
+			);
+		}
+
         Craft::info(
             Craft::t(
                 'google-location',
@@ -93,6 +103,11 @@ class CraftGoogleLocation extends Plugin
             __METHOD__
         );
     }
+
+    public function onRegisterFeedMeFields(\craft\feedme\events\RegisterFeedMeFieldsEvent $event)
+	{
+		$event->fields[] = FeedMeLocation::class;
+	}
 
     // Protected Methods
     // =========================================================================
