@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Craft Google Location plugin for Craft CMS 3.x
  *
@@ -62,11 +63,9 @@ class Location extends Field
     {
         /* transform old address value to new */
         if (array_key_exists('address', $config)) {
-            $config['address'] = (bool)$config['address'];
+            $config['address'] = (bool) $config['address'];
         }
         parent::__construct($config);
-
-
     }
 
     /**
@@ -79,7 +78,7 @@ class Location extends Field
         $this->countryService = Craft::$app->getModule('countries')->service;
 
         $countries = $this->countryService->getCountries();
-        $this->countries = array_map(function($country) {
+        $this->countries = array_map(function ($country) {
             return [
                 'value' => $country->code,
                 'label' => $country->name,
@@ -102,7 +101,8 @@ class Location extends Field
         return $rules;
     }
 
-    public function validateLocation($model) {
+    public function validateLocation($model)
+    {
         $success = $model->{$this->handle}->validate();
         if (!$success) {
             $errors = $model->{$this->handle}->getFirstErrors();
@@ -133,6 +133,10 @@ class Location extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
+        if ($value instanceof Model) {
+            return $value;
+        }
+
         if (empty($value)) {
             return new Model();
         }
