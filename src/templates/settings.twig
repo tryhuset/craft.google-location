@@ -15,10 +15,11 @@
 
 {% import "_includes/forms" as forms %}
 
-{{ forms.textField({
+{{ forms.autosuggestField({
     label: 'Api key'|t('google-location'),
     id: 'apiKey',
     name: 'apiKey',
+    suggestions: craft.cp.getEnvSuggestions(),
     value: settings['apiKey']})
 }}
 

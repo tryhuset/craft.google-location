@@ -30,7 +30,7 @@ class LocationFieldAsset extends AssetBundle
      */
     public function init()
     {
-        $apiKey = CraftGoogleLocation::getInstance()->settings->apiKey;
+        $apiKey = Craft::parseEnv(CraftGoogleLocation::getInstance()->settings->apiKey);
         $this->sourcePath = "@apt/craftgooglelocation/assetbundles/locationfield/dist";
 
         $this->depends = [
