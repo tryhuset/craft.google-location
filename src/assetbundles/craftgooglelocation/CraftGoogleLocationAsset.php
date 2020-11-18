@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 Thomas Sømoen
  */
 
-namespace apt\craftgooglelocation\assetbundles\CraftGoogleLocation;
+namespace apt\craftgooglelocation\assetbundles\craftgooglelocation;
 
 use Craft;
 use craft\web\AssetBundle;
