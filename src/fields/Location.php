@@ -21,6 +21,7 @@ use craft\helpers\Db;
 use yii\db\Schema;
 use craft\helpers\Json;
 use apt\craftgooglelocation\models\Location as Model;
+use apt\craftgooglelocation\gql\interfaces\LocationInterface;
 use apt\craftcountriesmodule\CraftCountriesModule;
 use apt\craftcountriesmodule\models\Country;
 
@@ -126,6 +127,14 @@ class Location extends Field
     public function getContentColumnType(): string
     {
         return Schema::TYPE_STRING;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentGqlType()
+    {
+        return LocationInterface::getType();
     }
 
     /**

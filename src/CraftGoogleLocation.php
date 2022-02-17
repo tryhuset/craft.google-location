@@ -31,6 +31,8 @@ use apt\craftgooglelocation\fields\Area as AreaField;
 use apt\craftgooglelocation\integrations\feedme\Location as FeedMeLocation;
 use apt\craftgooglelocation\gql\arguments\SettingsArguments;
 use apt\craftgooglelocation\gql\interfaces\SettingsInterface;
+use apt\craftgooglelocation\gql\interfaces\LocationInterface;
+use apt\craftgooglelocation\gql\interfaces\CountryInterface;
 use apt\craftgooglelocation\gql\resolvers\SettingsResolver;
 use apt\craftcountriesmodule\CraftCountriesModule;
 
@@ -155,6 +157,8 @@ class CraftGoogleLocation extends Plugin
             Gql::EVENT_REGISTER_GQL_TYPES,
             function (RegisterGqlTypesEvent $event) {
                 $event->types[] = SettingsInterface::class;
+                $event->types[] = CountryInterface::class;
+                $event->types[] = LocationInterface::class;
             }
         );
 
