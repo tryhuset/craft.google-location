@@ -15,7 +15,11 @@ use craft\base\Plugin;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
 use craft\services\Fields;
+use craft\services\Gql;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterGqlQueriesEvent;
+use craft\events\RegisterGqlTypesEvent;
+use GraphQL\Type\Definition\Type;
 
 use yii\base\Event;
 
@@ -25,6 +29,9 @@ use apt\craftgooglelocation\models\Settings;
 use apt\craftgooglelocation\fields\Location as LocationField;
 use apt\craftgooglelocation\fields\Area as AreaField;
 use apt\craftgooglelocation\integrations\feedme\Location as FeedMeLocation;
+use apt\craftgooglelocation\gql\arguments\SettingsArguments;
+use apt\craftgooglelocation\gql\interfaces\SettingsInterface;
+use apt\craftgooglelocation\gql\resolvers\SettingsResolver;
 use apt\craftcountriesmodule\CraftCountriesModule;
 
 /**
@@ -94,6 +101,8 @@ class CraftGoogleLocation extends Plugin
 			);
 		}
 
+        $this->registerGraphQL();
+
         Craft::info(
             Craft::t(
                 'google-location',
@@ -132,4 +141,36 @@ class CraftGoogleLocation extends Plugin
             ]
         );
     }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Register GraphQL event listeners
+     */
+    private function registerGraphQL(): void
+    {
+        Event::on(
+            Gql::class,
+            Gql::EVENT_REGISTER_GQL_TYPES,
+            function (RegisterGqlTypesEvent $event) {
+                $event->types[] = SettingsInterface::class;
+            }
+        );
+
+        Event::on(
+            Gql::class,
+            Gql::EVENT_REGISTER_GQL_QUERIES,
+            function (RegisterGqlQueriesEvent $event) {
+                $event->queries['googleLocationSettings'] =
+                [
+                    'type' => SettingsInterface::getType(),
+                    'args' => SettingsArguments::getArguments(),
+                    'resolve' => SettingsResolver::class . '::resolve',
+                ];
+            }
+        );
+
+    }
+
 }
