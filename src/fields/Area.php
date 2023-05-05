@@ -89,7 +89,7 @@ class Area extends Field
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules = array_merge($rules, [
@@ -125,7 +125,7 @@ class Area extends Field
     /**
      * @inheritdoc
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         if (empty($value)) {
             return [];
@@ -144,7 +144,7 @@ class Area extends Field
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         Craft::$app->getView()->registerAssetBundle(AreaSettingsAsset::class);
         $contentService = CraftGoogleLocation::getInstance()->content;
@@ -182,7 +182,7 @@ class Area extends Field
     /**
      * @inheritdoc
      */
-    public function getInputHtml($value, ElementInterface $element = null): string
+    public function getInputHtml(mixed $value, ?\craft\base\ElementInterface $element = null): string
     {
         $markers = [];
         if ($this->markers) {

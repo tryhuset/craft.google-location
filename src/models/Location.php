@@ -88,7 +88,7 @@ class Location extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $defaultCountry = $this->countryService->getCountryByCode(DEFAULT_COUNTRY);
         return [

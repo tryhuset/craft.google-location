@@ -72,7 +72,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         CraftCountriesModule::register();
@@ -90,7 +90,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules = array_merge($rules, [
@@ -132,7 +132,7 @@ class Location extends Field
     /**
      * @inheritDoc
      */
-    public function getContentGqlType()
+    public function getContentGqlType(): \GraphQL\Type\Definition\Type|array
     {
         return LocationInterface::getType();
     }
@@ -140,7 +140,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         if ($value instanceof Model) {
             return $value;
@@ -170,7 +170,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function serializeValue($value, ElementInterface $element = null)
+    public function serializeValue(mixed $value, ?\craft\base\ElementInterface $element = null): mixed
     {
         if ($value['country'] instanceof Country) {
             $value['country'] = $value['country']->code;
@@ -182,7 +182,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         $countries = $this->countries;
 
@@ -203,7 +203,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function getInputHtml($value, ElementInterface $element = null): string
+    public function getInputHtml(mixed $value, ?\craft\base\ElementInterface $element = null): string
     {
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(LocationFieldAsset::class);
