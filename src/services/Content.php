@@ -16,7 +16,7 @@ use Craft;
 use craft\base\Component;
 use craft\fields\Matrix;
 use craft\elements\Entry;
-use craft\elements\db\MatrixBlockQuery;
+use craft\elements\db\EntryQuery;
 use apt\craftgooglelocation\fields\Location;
 use apt\craftgooglelocation\models\Location as LocationModel;
 
@@ -51,7 +51,7 @@ class Content extends Component
     private function getMatrixBlocks($blocks) : array
     {
         $blocks = array_map(function($block) {
-            $fields = array_filter($block->getFieldLayout()->getFields(), function($field) {
+            $fields = array_filter($block->getFieldLayout()->getCustomFields(), function($field) {
                 return ($field instanceof Location);
             });
             $assoc = [];
@@ -94,7 +94,7 @@ class Content extends Component
 
         $fields = array_map(function($field) {
             if($field instanceof Matrix) {
-                $blocks = $this->getMatrixBlocks($field->blockTypes);
+                $blocks = $this->getMatrixBlocks($field->getEntryTypes());
                 return [
                     'type' => 'matrix',
                     'handle' => $field->handle,
@@ -126,7 +126,7 @@ class Content extends Component
     private function getEntryTypes($types) : array
     {
         $types = array_map(function($type) {
-            $fields = $this->getFields($type->getFieldLayout()->getFields());
+            $fields = $this->getFields($type->getFieldLayout()->getCustomFields());
 
             return [
                 'handle' => $type->handle,
@@ -153,7 +153,7 @@ class Content extends Component
                 'name' => Craft::t('site', $section->name),
                 'types' => $this->getEntryTypes($section->getEntryTypes()),
             ];
-        }, Craft::$app->sections->getAllSections());
+        }, Craft::$app->entries->getAllSections());
 
         $sections = array_filter($sections, function($section) {
             return count($section['types']) > 0;
@@ -323,7 +323,7 @@ class Content extends Component
                         'lng' => floatval($location->lng),
                     ],
                 ];
-            } else if ($location instanceof MatrixBlockQuery) {
+            } else if ($location instanceof EntryQuery) {
                 foreach ($location->type($settings['matrixBlock'])->all() as $block) {
                     $location = $block[$settings['matrixBlockField']];
                     $locations[] = [

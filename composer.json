@@ -2,7 +2,7 @@
   "name": "apt/craft-google-location",
   "description": "Select location in google map",
   "type": "craft-plugin",
-  "version": "2.0",
+  "version": "3.0.0",
   "keywords": [
     "craft",
     "cms",
@@ -28,8 +28,9 @@
     }
   ],
   "require": {
-    "craftcms/cms": "^4.0",
-    "apt/craft-countries-module": "^2.0"
+    "php": ">=8.2",
+    "craftcms/cms": "^5.0",
+    "apt/craft-countries-module": "^3.0"
   },
   "autoload": {
     "psr-4": {
@@ -49,5 +50,12 @@
   },
   "require-dev": {
     "craftcms/rector": "dev-main"
+  },
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true,
+      "craftcms/plugin-installer": true,
+      "craftcms/generator": true
+    }
   }
 }

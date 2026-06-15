@@ -124,7 +124,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function getContentColumnType(): string
+    public static function dbType(): array|string|null
     {
         return Schema::TYPE_STRING;
     }
@@ -203,7 +203,7 @@ class Location extends Field
     /**
      * @inheritdoc
      */
-    public function getInputHtml(mixed $value, ?\craft\base\ElementInterface $element = null): string
+    protected function inputHtml(mixed $value, ?\craft\base\ElementInterface $element, bool $inline = false): string
     {
         // Register our asset bundle
         Craft::$app->getView()->registerAssetBundle(LocationFieldAsset::class);

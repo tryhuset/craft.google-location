@@ -117,7 +117,7 @@ class Area extends Field
     /**
      * @inheritdoc
      */
-    public function getContentColumnType(): string
+    public static function dbType(): array|string|null
     {
         return Schema::TYPE_TEXT;
     }
@@ -182,7 +182,7 @@ class Area extends Field
     /**
      * @inheritdoc
      */
-    public function getInputHtml(mixed $value, ?\craft\base\ElementInterface $element = null): string
+    protected function inputHtml(mixed $value, ?\craft\base\ElementInterface $element, bool $inline = false): string
     {
         $markers = [];
         if ($this->markers) {
